@@ -35,13 +35,15 @@ export async function analyzeAddress(address: string): Promise<AnalysisResult> {
     // Process token holdings
     const tokensHeld = tokenAccounts.value.length;
 
-    // Calculate risk score based on Solana-specific factors
-    const riskScore = calculateSolanaRiskScore({
-      balance: solBalance,
-      totalTransactions,
-      tokensHeld,
-      recentTransactions: recentTransactions.length,
-    });
+    // Calculate risk breakdown metrics
+    const balanceRisk = calculateBalanceRisk(solBalance);
+    const activityRisk = calculateActivityRisk(totalTransactions);
+    const tokenRisk = calculateTokenRisk(tokensHeld);
+    const transactionRisk = calculateTransactionRisk(recentTransactions.length);
+
+    // Calculate overall risk score
+    const riskScore =
+      (balanceRisk + activityRisk + tokenRisk + transactionRisk) / 4;
 
     // Generate flags
     const flags = generateSolanaFlags({
@@ -56,14 +58,23 @@ export async function analyzeAddress(address: string): Promise<AnalysisResult> {
       riskScore < 30 ? "safe" : riskScore < 70 ? "warning" : "danger";
 
     // Generate AI explanation
-    const aiAnalysis = generateSolanaAIExplanation(riskScore, flags);
+    const aiAnalysis = generateSolanaAIExplanation(
+      Math.round(riskScore),
+      flags,
+    );
 
     return {
       chain: "solana",
       address: address.toLowerCase(),
-      riskScore,
+      riskScore: Math.round(riskScore),
       riskLevel,
       flags,
+      riskBreakdown: {
+        liquidityRisk: balanceRisk,
+        holderConcentrationRisk: tokenRisk,
+        transactionBehaviorRisk: transactionRisk,
+        contractAgeRisk: activityRisk,
+      },
       confidenceScore: Math.min(95, 70 + Math.random() * 25), // Mock confidence
       walletStats: {
         totalTransactions,
@@ -82,32 +93,47 @@ export async function analyzeAddress(address: string): Promise<AnalysisResult> {
 }
 
 /**
- * Calculate risk score for Solana wallet
+ * Calculate balance risk (0-100)
  */
-function calculateSolanaRiskScore(factors: {
-  balance: number;
-  totalTransactions: number;
-  tokensHeld: number;
-  recentTransactions: number;
-}): number {
-  let score = 0;
+function calculateBalanceRisk(balance: number): number {
+  if (balance < 0.01) return 100;
+  if (balance < 0.1) return 80;
+  if (balance < 0.5) return 50;
+  if (balance < 2) return 25;
+  return 10;
+}
 
-  // Low balance risk
-  if (factors.balance < 0.1) score += 30;
-  else if (factors.balance < 1) score += 15;
+/**
+ * Calculate activity risk (0-100)
+ */
+function calculateActivityRisk(totalTransactions: number): number {
+  if (totalTransactions === 0) return 100;
+  if (totalTransactions < 3) return 80;
+  if (totalTransactions < 10) return 50;
+  if (totalTransactions < 50) return 25;
+  return 10;
+}
 
-  // Low activity risk
-  if (factors.totalTransactions < 5) score += 25;
-  else if (factors.totalTransactions < 20) score += 10;
+/**
+ * Calculate token holdings risk (0-100)
+ */
+function calculateTokenRisk(tokensHeld: number): number {
+  if (tokensHeld === 0) return 30;
+  if (tokensHeld < 5) return 20;
+  if (tokensHeld > 100) return 70;
+  if (tokensHeld > 50) return 50;
+  if (tokensHeld > 20) return 35;
+  return 15;
+}
 
-  // High token holdings (potential spam/scam interactions)
-  if (factors.tokensHeld > 50) score += 20;
-  else if (factors.tokensHeld > 20) score += 10;
-
-  // Recent high activity (potential suspicious behavior)
-  if (factors.recentTransactions > 15) score += 15;
-
-  return Math.min(100, Math.max(0, score));
+/**
+ * Calculate recent transaction risk (0-100)
+ */
+function calculateTransactionRisk(recentTransactions: number): number {
+  if (recentTransactions === 0) return 10;
+  if (recentTransactions < 5) return 15;
+  if (recentTransactions > 15) return 75;
+  return 25;
 }
 
 /**

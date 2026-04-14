@@ -33,10 +33,11 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
       />
 
       {/* Section B: Risk Breakdown */}
-      {data.riskBreakdown && data.contractAgeDays && (
+      {data.riskBreakdown && (
         <RiskBreakdown
           breakdown={data.riskBreakdown}
-          contractAgeDays={data.contractAgeDays}
+          contractAgeDays={data.contractAgeDays || 0}
+          chain={data.chain}
         />
       )}
 
