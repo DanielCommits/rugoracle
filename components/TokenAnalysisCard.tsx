@@ -1,29 +1,35 @@
-'use client';
+"use client";
 
-import { AlertTriangle } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { AlertTriangle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface TokenAnalysisCardProps {
-  liquidity: string;
-  topHolders: string;
+  liquidity?: string;
+  topHolders?: string;
   suspiciousFlags: string[];
 }
 
 export function TokenAnalysisCard({
-  liquidity,
-  topHolders,
+  liquidity = "N/A",
+  topHolders = "N/A",
   suspiciousFlags,
 }: TokenAnalysisCardProps) {
   return (
     <div className="rounded-lg border border-slate-800 bg-slate-900/50 p-6">
-      <h3 className="text-slate-100 text-sm font-semibold mb-6 uppercase tracking-wider">Token Details</h3>
+      <h3 className="text-slate-100 text-sm font-semibold mb-6 uppercase tracking-wider">
+        Token Details
+      </h3>
       <div className="space-y-6">
         <div className="p-4 rounded-lg bg-slate-800/30 border border-slate-800">
-          <div className="text-slate-400 text-xs uppercase tracking-wide mb-2">Liquidity</div>
+          <div className="text-slate-400 text-xs uppercase tracking-wide mb-2">
+            Liquidity
+          </div>
           <div className="text-2xl font-bold text-cyan-400">{liquidity}</div>
         </div>
         <div className="p-4 rounded-lg bg-slate-800/30 border border-slate-800">
-          <div className="text-slate-400 text-xs uppercase tracking-wide mb-2">Top Holder</div>
+          <div className="text-slate-400 text-xs uppercase tracking-wide mb-2">
+            Top Holder
+          </div>
           <div className="text-2xl font-bold text-purple-400">{topHolders}</div>
         </div>
         {suspiciousFlags.length > 0 && (
