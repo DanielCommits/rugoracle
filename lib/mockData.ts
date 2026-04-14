@@ -1,11 +1,11 @@
-import { calculateRiskScore, type RiskFactors } from './scoring';
+import { calculateRiskScore, type RiskFactors } from "./scoring";
 
-import { type StructuredAI } from './scoring';
+import { type StructuredAI } from "./scoring";
 
 export interface AnalysisResult {
   address: string;
   riskScore: number;
-  riskLevel: 'safe' | 'warning' | 'danger';
+  riskLevel: "safe" | "warning" | "danger";
   flags: string[];
   riskBreakdown: {
     liquidityRisk: number;
@@ -13,6 +13,7 @@ export interface AnalysisResult {
     transactionBehaviorRisk: number;
     contractAgeRisk: number;
   };
+  contractAgeDays: number;
   confidenceScore: number;
   walletStats: {
     totalTransactions: number;
@@ -34,7 +35,10 @@ export function generateMockAnalysis(address: string): AnalysisResult {
   // Use address hash to seed pseudo-random values for consistency
   const seed = address.charCodeAt(2) + address.charCodeAt(3);
   const rng = (min: number, max: number) => {
-    return Math.floor(((seed * 9301 + 49297) % 233280) / 233280 * (max - min)) + min;
+    return (
+      Math.floor((((seed * 9301 + 49297) % 233280) / 233280) * (max - min)) +
+      min
+    );
   };
 
   // Generate risk factors
@@ -47,7 +51,14 @@ export function generateMockAnalysis(address: string): AnalysisResult {
   };
 
   const scoreResult = calculateRiskScore(factors);
-  const { riskScore, flags, riskLevel, riskBreakdown, confidenceScore, aiAnalysis } = scoreResult;
+  const {
+    riskScore,
+    flags,
+    riskLevel,
+    riskBreakdown,
+    confidenceScore,
+    aiAnalysis,
+  } = scoreResult;
 
   // Generate wallet stats
   const totalTransactions = rng(50, 2000);
@@ -65,6 +76,7 @@ export function generateMockAnalysis(address: string): AnalysisResult {
     riskLevel,
     flags,
     riskBreakdown,
+    contractAgeDays: factors.contractAge,
     confidenceScore,
     walletStats: {
       totalTransactions,
@@ -84,10 +96,10 @@ export function generateMockAnalysis(address: string): AnalysisResult {
  * Format hours into human-readable time ago
  */
 function formatTimeAgo(hours: number): string {
-  if (hours < 1) return 'Just now';
-  if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  if (hours < 1) return "Just now";
+  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
   const days = Math.floor(hours / 24);
-  return `${days} day${days > 1 ? 's' : ''} ago`;
+  return `${days} day${days > 1 ? "s" : ""} ago`;
 }
 
 /**
@@ -95,13 +107,11 @@ function formatTimeAgo(hours: number): string {
  */
 function flagToLabel(flag: string): string {
   const labels: Record<string, string> = {
-    high_concentration: 'High Token Concentration',
-    low_liquidity: 'Low Liquidity',
-    new_contract: 'New Contract',
-    high_transaction_velocity: 'Rapid Transactions',
-    concentrated_holders: 'Concentrated Holders',
+    high_concentration: "High Token Concentration",
+    low_liquidity: "Low Liquidity",
+    new_contract: "New Contract",
+    high_transaction_velocity: "Rapid Transactions",
+    concentrated_holders: "Concentrated Holders",
   };
   return labels[flag] || flag;
 }
-
-

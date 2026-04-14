@@ -5,14 +5,15 @@ interface RiskBreakdownProps {
     transactionBehaviorRisk: number;
     contractAgeRisk: number;
   };
+  contractAgeDays: number;
 }
 
-export function RiskBreakdown({ breakdown }: RiskBreakdownProps) {
+export function RiskBreakdown({ breakdown, contractAgeDays }: RiskBreakdownProps) {
   const factors = [
-    { label: 'Liquidity Risk', value: breakdown.liquidityRisk, color: 'from-cyan-500 to-blue-500' },
-    { label: 'Holder Concentration', value: breakdown.holderConcentrationRisk, color: 'from-purple-500 to-pink-500' },
-    { label: 'Transaction Behavior', value: breakdown.transactionBehaviorRisk, color: 'from-orange-500 to-red-500' },
-    { label: 'Contract Age', value: breakdown.contractAgeRisk, color: 'from-yellow-500 to-orange-500' },
+    { label: 'Liquidity Risk', value: breakdown.liquidityRisk, display: `${breakdown.liquidityRisk}%`, color: 'from-cyan-500 to-blue-500' },
+    { label: 'Holder Concentration', value: breakdown.holderConcentrationRisk, display: `${breakdown.holderConcentrationRisk}%`, color: 'from-purple-500 to-pink-500' },
+    { label: 'Transaction Behavior', value: breakdown.transactionBehaviorRisk, display: `${breakdown.transactionBehaviorRisk}%`, color: 'from-orange-500 to-red-500' },
+    { label: 'Contract Age', value: breakdown.contractAgeRisk, display: `${contractAgeDays} days`, color: 'from-yellow-500 to-orange-500' },
   ];
 
   return (
@@ -24,7 +25,7 @@ export function RiskBreakdown({ breakdown }: RiskBreakdownProps) {
           <div key={factor.label} className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-slate-300">{factor.label}</span>
-              <span className="text-sm font-bold text-slate-100">{factor.value}%</span>
+              <span className="text-sm font-bold text-slate-100">{factor.display}</span>
             </div>
             <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
               <div

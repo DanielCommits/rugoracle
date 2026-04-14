@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { RiskScoreCard } from './RiskScoreCard';
-import { WalletOverviewCard } from './WalletOverviewCard';
-import { TokenAnalysisCard } from './TokenAnalysisCard';
-import { AIExplanationCard } from './AIExplanationCard';
-import { RiskBreakdown } from './RiskBreakdown';
-import { RiskFlags } from './RiskFlags';
-import { OverviewHeader } from './OverviewHeader';
-import type { AnalysisResult } from '@/lib/mockData';
+import { RiskScoreCard } from "./RiskScoreCard";
+import { WalletOverviewCard } from "./WalletOverviewCard";
+import { TokenAnalysisCard } from "./TokenAnalysisCard";
+import { AIExplanationCard } from "./AIExplanationCard";
+import { RiskBreakdown } from "./RiskBreakdown";
+import { RiskFlags } from "./RiskFlags";
+import { OverviewHeader } from "./OverviewHeader";
+import type { AnalysisResult } from "@/lib/mockData";
 
 interface ResultsDashboardProps {
   data: AnalysisResult;
@@ -16,9 +16,10 @@ interface ResultsDashboardProps {
 export function ResultsDashboard({ data }: ResultsDashboardProps) {
   // Provide fallback aiAnalysis if not present
   const aiAnalysis = data.aiAnalysis || {
-    summary: 'Analysis complete. Review the risk indicators above for detailed findings.',
-    drivers: ['Data analysis in progress'],
-    verdict: 'Warning' as const,
+    summary:
+      "Analysis complete. Review the risk indicators above for detailed findings.",
+    drivers: ["Data analysis in progress"],
+    verdict: "Warning" as const,
   };
 
   return (
@@ -31,7 +32,10 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
       />
 
       {/* Section B: Risk Breakdown */}
-      <RiskBreakdown breakdown={data.riskBreakdown} />
+      <RiskBreakdown
+        breakdown={data.riskBreakdown}
+        contractAgeDays={data.contractAgeDays}
+      />
 
       {/* Section C: Risk Flags */}
       <RiskFlags flags={data.flags} />
@@ -52,8 +56,8 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
       </div>
 
       {/* Section E: AI Analysis */}
-      <AIExplanationCard 
-        analysis={aiAnalysis} 
+      <AIExplanationCard
+        analysis={aiAnalysis}
         confidenceScore={data.confidenceScore}
       />
     </div>
