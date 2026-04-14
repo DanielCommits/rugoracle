@@ -29,13 +29,16 @@ export function ResultsDashboard({ data }: ResultsDashboardProps) {
         address={data.address}
         riskScore={data.riskScore}
         riskLevel={data.riskLevel}
+        chain={data.chain}
       />
 
       {/* Section B: Risk Breakdown */}
-      <RiskBreakdown
-        breakdown={data.riskBreakdown}
-        contractAgeDays={data.contractAgeDays}
-      />
+      {data.riskBreakdown && data.contractAgeDays && (
+        <RiskBreakdown
+          breakdown={data.riskBreakdown}
+          contractAgeDays={data.contractAgeDays}
+        />
+      )}
 
       {/* Section C: Risk Flags */}
       <RiskFlags flags={data.flags} />

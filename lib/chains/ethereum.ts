@@ -1,37 +1,11 @@
-import { calculateRiskScore, type RiskFactors } from "./scoring";
-import { type StructuredAI } from "./scoring";
-
-export interface AnalysisResult {
-  chain: "ethereum" | "solana";
-  address: string;
-  riskScore: number;
-  riskLevel: "safe" | "warning" | "danger";
-  flags: string[];
-  riskBreakdown?: {
-    liquidityRisk: number;
-    holderConcentrationRisk: number;
-    transactionBehaviorRisk: number;
-    contractAgeRisk: number;
-  };
-  contractAgeDays?: number;
-  confidenceScore: number;
-  walletStats: {
-    totalTransactions: number;
-    tokensHeld: number;
-    lastActivity: string;
-  };
-  tokenStats: {
-    liquidity?: string;
-    topHolders?: string;
-    suspiciousFlags: string[];
-  };
-  aiAnalysis: StructuredAI;
-}
+import { calculateRiskScore, type RiskFactors } from "../scoring";
+import { type StructuredAI } from "../scoring";
+import { type AnalysisResult } from "../mockData";
 
 /**
- * Generate realistic mock data for testing
+ * Generate realistic mock data for Ethereum testing
  */
-export function generateMockAnalysis(address: string): AnalysisResult {
+function generateMockAnalysis(address: string): AnalysisResult {
   // Use address hash to seed pseudo-random values for consistency
   const seed = address.charCodeAt(2) + address.charCodeAt(3);
   const rng = (min: number, max: number) => {
@@ -94,13 +68,14 @@ export function generateMockAnalysis(address: string): AnalysisResult {
 }
 
 /**
- * Format hours into human-readable time ago
+ * Analyze Ethereum address
  */
-function formatTimeAgo(hours: number): string {
-  if (hours < 1) return "Just now";
-  if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
-  const days = Math.floor(hours / 24);
-  return `${days} day${days > 1 ? "s" : ""} ago`;
+export async function analyzeAddress(address: string): Promise<AnalysisResult> {
+  // Simulate API processing delay
+  await new Promise((resolve) => setTimeout(resolve, 800));
+
+  // Generate analysis (mock data for now)
+  return generateMockAnalysis(address);
 }
 
 /**
@@ -108,11 +83,21 @@ function formatTimeAgo(hours: number): string {
  */
 function flagToLabel(flag: string): string {
   const labels: Record<string, string> = {
-    high_concentration: "High Token Concentration",
     low_liquidity: "Low Liquidity",
-    new_contract: "New Contract",
-    high_transaction_velocity: "Rapid Transactions",
-    concentrated_holders: "Concentrated Holders",
+    high_concentration: "High Holder Concentration",
+    new_contract: "Very New Contract",
+    high_transaction_velocity: "High Transaction Velocity",
   };
   return labels[flag] || flag;
+}
+
+/**
+ * Format time ago string
+ */
+function formatTimeAgo(hours: number): string {
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  return `${months}mo ago`;
 }

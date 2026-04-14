@@ -31,7 +31,8 @@ export default function AboutPage() {
             the prevalence of scams, rug pulls, and fraudulent projects. Too
             many investors lose money to poorly vetted tokens and suspicious
             wallets. We believe that access to intelligent, data-driven security
-            analysis should be free and available to everyone.
+            analysis should be free and available to everyone across all major
+            blockchains.
           </p>
         </section>
 
@@ -43,7 +44,7 @@ export default function AboutPage() {
               <Zap className="w-8 h-8 text-cyan-400" />
               <h3 className="font-semibold text-slate-100">Instant Analysis</h3>
               <p className="text-slate-400 text-sm">
-                Analyze Ethereum wallets and tokens in seconds with our advanced
+                Analyze Ethereum and Solana wallets and tokens in seconds with our advanced
                 algorithms.
               </p>
             </div>
@@ -80,8 +81,9 @@ export default function AboutPage() {
                   Comprehensive Risk Scoring
                 </h3>
                 <p className="text-slate-400 text-sm">
-                  0-100 risk scale analyzing liquidity, holder concentration,
-                  contract age, and transaction behavior.
+                  0-100 risk scale analyzing blockchain-specific metrics like liquidity,
+                  holder concentration, wallet activity, and transaction patterns across
+                  Ethereum and Solana.
                 </p>
               </div>
             </div>

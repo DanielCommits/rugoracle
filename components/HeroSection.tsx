@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { AddressInput } from './AddressInput';
-import { Zap } from 'lucide-react';
+import { AddressInput } from "./AddressInput";
+import { Zap } from "lucide-react";
 
 interface HeroSectionProps {
   onAnalyze: (address: string) => Promise<void>;
@@ -14,7 +14,9 @@ export function HeroSection({ onAnalyze, isLoading }: HeroSectionProps) {
       <div className="text-center max-w-2xl mx-auto mb-12">
         <div className="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/30 rounded-full px-4 py-2 mb-6">
           <Zap className="w-4 h-4 text-purple-400" />
-          <span className="text-purple-300 text-sm font-medium">Instant Web3 Security Analysis</span>
+          <span className="text-purple-300 text-sm font-medium">
+            Instant Web3 Security Analysis
+          </span>
         </div>
 
         <h1 className="text-5xl md:text-6xl font-bold mb-6">
@@ -26,7 +28,9 @@ export function HeroSection({ onAnalyze, isLoading }: HeroSectionProps) {
         </h1>
 
         <p className="text-xl text-slate-400 mb-8 leading-relaxed">
-          Analyze any Ethereum wallet or token contract in seconds. Get AI-powered risk assessments and detailed insights to protect your crypto.
+          Analyze any Ethereum or Solana wallet in seconds. Get AI-powered risk
+          assessments and detailed insights to protect your crypto across
+          multiple blockchains.
         </p>
 
         {/* Stats */}
